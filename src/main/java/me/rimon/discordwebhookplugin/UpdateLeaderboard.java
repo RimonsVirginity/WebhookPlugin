@@ -16,16 +16,21 @@ import saber.croplb.utils.LBPlayer;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Logger;
+
+import static club.minnced.discord.webhook.WebhookClient.withUrl;
 
 public class UpdateLeaderboard implements CommandExecutor {
     private Logger logger;
+    public DiscordWebhookPlugin plugin;
+
+    public UpdateLeaderboard(DiscordWebhookPlugin plugin){
+        this.plugin = plugin;
+    }
 
     public UpdateLeaderboard(Logger logger) {
         this.logger = logger;
     }
-
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -43,7 +48,7 @@ public class UpdateLeaderboard implements CommandExecutor {
                 player.sendMessage("Could not find or read the stored message ID.");
                 return false;
             }
-            WebhookClient webhook = WebhookClient.withUrl("https://discord.com/api/webhooks/1220799046260887724/5rD-NmVJ_Q8A475oglIhyxxqqhv5-Y1e0BfNTP8iHNbJGDkVtY2vkcKh9c8u9zRMjOmy");
+            WebhookClient webhook = withUrl(plugin.getConfig().getString("CropLeaderboard"));
             WebhookEmbed updatedEmbed = new WebhookEmbedBuilder()
                     .setColor(0xff0000)
                     .setTitle(new WebhookEmbed.EmbedTitle("Crops Harvested Leaderboard",null))

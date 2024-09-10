@@ -10,14 +10,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import saber.croplb.CropLB;
 import saber.croplb.utils.LBPlayer;
-
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.logging.Logger;
+import static club.minnced.discord.webhook.WebhookClient.withUrl;
+
 
 public class NewLeaderboard implements CommandExecutor {
     private Logger logger;
+    public DiscordWebhookPlugin plugin;
+
+    public NewLeaderboard(DiscordWebhookPlugin plugin){
+        this.plugin = plugin;
+    }
+
 
     public NewLeaderboard(Logger logger) {
         this.logger = logger;
@@ -30,7 +36,7 @@ public class NewLeaderboard implements CommandExecutor {
         String data = LeaderboardUtil.prepareLeaderboardData(cropLB, duration);
 
         if (player.hasPermission("DiscordWebhookPlugin.NewLeaderboard")) {
-            WebhookClient webhook = WebhookClient.withUrl("https://discord.com/api/webhooks/1220799046260887724/5rD-NmVJ_Q8A475oglIhyxxqqhv5-Y1e0BfNTP8iHNbJGDkVtY2vkcKh9c8u9zRMjOmy");
+            WebhookClient webhook = withUrl(plugin.getConfig().getString("CropLeaderboard"));
             WebhookEmbed embed = new WebhookEmbedBuilder()
                     .setColor(0xff0000)
                     .setDescription(data)
