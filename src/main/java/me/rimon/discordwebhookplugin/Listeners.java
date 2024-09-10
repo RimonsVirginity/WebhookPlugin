@@ -53,11 +53,6 @@ public class Listeners implements Listener {
 
         WebhookClient webhook = WebhookClient.withUrl("https://discord.com/api/webhooks/1220799046260887724/5rD-NmVJ_Q8A475oglIhyxxqqhv5-Y1e0BfNTP8iHNbJGDkVtY2vkcKh9c8u9zRMjOmy");
         webhook.send("**"+ player.getName() + "** >> " + chat);
-//        WebhookEmbed embed = new WebhookEmbedBuilder()
-//                .setDescription("**"+ player.getName() + "** >> " + chat)
-//                .build();
-//        webhook.send(embed);
-//        webhook.close();
     }
 }
 
