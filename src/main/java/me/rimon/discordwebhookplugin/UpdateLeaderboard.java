@@ -12,14 +12,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import saber.croplb.CropLB;
 import saber.croplb.utils.LBPlayer;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.logging.Logger;
 
 import static club.minnced.discord.webhook.WebhookClient.withUrl;
@@ -44,7 +41,7 @@ public class UpdateLeaderboard implements CommandExecutor {
         String data = LeaderboardUtil.prepareLeaderboardData(cropLB, duration);
         LocalDate now = LocalDate.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("MMM dd yyyy");
-        LocalDate weekStart = now.minusDays(7);
+        LocalDate weekStart = now.minusDays(now.getDayOfWeek().getValue()-1);
 
         if (player.hasPermission("DiscordWebhookPlugin.UpdateLeaderboard")) {
             long messageId;
@@ -59,7 +56,7 @@ public class UpdateLeaderboard implements CommandExecutor {
             WebhookEmbed updatedEmbed = new WebhookEmbedBuilder()
                     .setColor(0xff0000)
                     .setTitle(new WebhookEmbed.EmbedTitle("Crops Harvested Leaderboard" ,null))
-                    .setAuthor(new WebhookEmbed.EmbedAuthor(weekStart.format(format) + " - " + now.format(format),"",""))
+                    .setAuthor(new WebhookEmbed.EmbedAuthor(weekStart.format(format) + " - " + weekStart.plusDays(6).format(format),"",""))
                     .setDescription(data)
                     .build();
             webhook.edit(messageId, new WebhookMessageBuilder().addEmbeds(updatedEmbed).build());

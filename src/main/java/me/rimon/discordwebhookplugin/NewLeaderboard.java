@@ -43,12 +43,12 @@ public class NewLeaderboard implements CommandExecutor {
             WebhookClient webhook = withUrl(plugin.getConfig().getString("CropLeaderboard"));
             LocalDate now = LocalDate.now();
             DateTimeFormatter format = DateTimeFormatter.ofPattern("MMM dd yyyy");
-            LocalDate weekStart = now.minusDays(7);
+            LocalDate weekStart = now.minusDays(now.getDayOfWeek().getValue()-1);
             WebhookEmbed embed = new WebhookEmbedBuilder()
                     .setColor(0xff0000)
                     .setDescription(data)
                     .setTitle(new WebhookEmbed.EmbedTitle("Crops Harvested Leaderboard" ,null))
-                    .setAuthor(new WebhookEmbed.EmbedAuthor(weekStart.format(format) + " - " + now.format(format),"",""))
+                    .setAuthor(new WebhookEmbed.EmbedAuthor(weekStart.format(format) + " - " + weekStart.plusDays(6).format(format),"",""))
                     .build();
             webhook.send(embed).thenAccept(sentMessage -> {
                 long messageId = sentMessage.getId();
