@@ -12,6 +12,10 @@ import saber.croplb.CropLB;
 import saber.croplb.utils.LBPlayer;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.logging.Logger;
 import static club.minnced.discord.webhook.WebhookClient.withUrl;
 
@@ -37,10 +41,14 @@ public class NewLeaderboard implements CommandExecutor {
 
         if (player.hasPermission("DiscordWebhookPlugin.NewLeaderboard")) {
             WebhookClient webhook = withUrl(plugin.getConfig().getString("CropLeaderboard"));
+            LocalDate now = LocalDate.now();
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("MMM dd yyyy");
+            LocalDate weekStart = now.minusDays(7);
             WebhookEmbed embed = new WebhookEmbedBuilder()
                     .setColor(0xff0000)
                     .setDescription(data)
-                    .setTitle(new WebhookEmbed.EmbedTitle("Crops Harvested Leaderboard",null))
+                    .setTitle(new WebhookEmbed.EmbedTitle("Crops Harvested Leaderboard" ,null))
+                    .setAuthor(new WebhookEmbed.EmbedAuthor(weekStart.format(format) + " - " + now.format(format),"",""))
                     .build();
             webhook.send(embed).thenAccept(sentMessage -> {
                 long messageId = sentMessage.getId();
