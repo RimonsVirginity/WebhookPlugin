@@ -36,19 +36,18 @@ public class NewLeaderboard implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
         CropLB cropLB = (CropLB) Bukkit.getPluginManager().getPlugin("CropLB");
-        LBPlayer.Duration duration = LBPlayer.Duration.WEEK;
+        LBPlayer.Duration duration = LBPlayer.Duration.MONTH;
         String data = LeaderboardUtil.prepareLeaderboardData(cropLB, duration);
 
         if (player.hasPermission("DiscordWebhookPlugin.NewLeaderboard")) {
             WebhookClient webhook = withUrl(plugin.getConfig().getString("CropLeaderboard"));
             LocalDate now = LocalDate.now();
-            DateTimeFormatter format = DateTimeFormatter.ofPattern("MMM dd yyyy");
-            LocalDate weekStart = now.minusDays(now.getDayOfWeek().getValue()-1);
+            DateTimeFormatter format = DateTimeFormatter.ofPattern("MMMM yyyy");
             WebhookEmbed embed = new WebhookEmbedBuilder()
                     .setColor(0xff0000)
                     .setDescription(data)
                     .setTitle(new WebhookEmbed.EmbedTitle("Crops Harvested Leaderboard" ,null))
-                    .setAuthor(new WebhookEmbed.EmbedAuthor(weekStart.format(format) + " - " + weekStart.plusDays(6).format(format),"",""))
+                    .setAuthor(new WebhookEmbed.EmbedAuthor(now.format(format)+ "","",""))
                     .build();
             webhook.send(embed).thenAccept(sentMessage -> {
                 long messageId = sentMessage.getId();
